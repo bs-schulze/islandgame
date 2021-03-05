@@ -54,12 +54,12 @@
         var tileset = map.addTilesetImage('test', 'tiles');
         ground = map.createLayer('ground', tileset, 0,0);
         
+        mario = this.physics.add.sprite(30, 30, 'mario').setBounce(1, 1).setCollideWorldBounds(true).setScale(2);
         layer1 = map.createLayer('layerblock', tileset, 0,0);
         layer1.setCollisionByProperty({collide:true}, true, true);
 
         var layerPhysics = this.physics.add.existing(layer1);
         layerPhysics.body.pushable = false;
-        mario = this.physics.add.sprite(30, 30, 'mario').setBounce(1, 1).setCollideWorldBounds(true).setScale(2);
         mario.collideWorldBounds = true;
         
         layer1.forEachTile(function(tile) {
