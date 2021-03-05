@@ -9,12 +9,12 @@
     var config = {
         type: Phaser.AUTO,
         width: 800,
-        height: 600,
+        height: 576,
         physics: {
             default: 'arcade',
             arcade: {
                 gravity: { y: 0 },
-                debug: true,
+                debug: false,
                 overlapBias: 8,
                 tileBias: 32,
                 fps: 60,
@@ -35,6 +35,7 @@
     var cursorKeys = undefined;
     var layer1 = undefined;
     var mario = undefined;
+    var collisionGroup = [];
 
     function preload ()
     {
@@ -50,47 +51,44 @@
     {
         cursorKeys = this.input.keyboard.createCursorKeys();
         var map = this.add.tilemap('tilejson');
-        //this.physics.add.existing(map);
         var tileset = map.addTilesetImage('test', 'tiles');
         ground = map.createLayer('ground', tileset, 0,0);
         
-        layer1 = map.createLayer('layer1', tileset, 0,0);
-        layer1.setCollisionByProperty({collide:true});
-        console.dir(layer1)
-        // layer1.body.setPushable(true);
-        // layer1.body.pushable = false ;
-        // layer1.setCollisionByExclusion([1]);
-        layer2 = this.physics.add.existing(layer1);
-        // this.physics.layer1.setPushable(false);
-        console.dir(this.physics);
+        layer1 = map.createLayer('layerblock', tileset, 0,0);
+        layer1.setCollisionByProperty({collide:true}, true, true);
+
+        var layerPhysics = this.physics.add.existing(layer1);
+        layerPhysics.body.pushable = false;
+        mario = this.physics.add.sprite(30, 30, 'mario').setBounce(1, 1).setCollideWorldBounds(true).setScale(2);
+        mario.collideWorldBounds = true;
         
-        // mario = this.physics.add.image(200,200, 'mario');
-        mario1 = this.add.sprite(10, 10, 'mario');
-        // mario.set
-        mario = this.physics.add.existing(mario1);
-        
-        this.physics.add.collider(mario, layer1);
-
-
-        // rect.setCollideWorldBounds(true);
-
-        const debugGraphics = this.add.graphics().setAlpha(0.75);
-        layer1.renderDebug(debugGraphics, {
-            tileColor: null, // Color of non-colliding tiles
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        layer1.forEachTile(function(tile) {
+            if(tile.canCollide) {
+                collisionGroup.push(tile);
+            }
         });
-        
+
+        if(config.physics.debug) {
+            const debugGraphics = this.add.graphics().setAlpha(0.75);
+            layerPhysics.renderDebug(debugGraphics, {
+                tileColor: null, // Color of non-colliding tiles
+                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+                faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+            });
+        }
     }
+    
     function update ()
     {
+        this.physics.collideTiles(mario, collisionGroup);
         var isUpDown = cursorKeys.up.isDown;
         var isDownDown = cursorKeys.down.isDown;
         var isLeftDown = cursorKeys.left.isDown;
         var isRightDown = cursorKeys.right.isDown;
         var isSpaceDown = cursorKeys.space.isDown;
         var isShiftDown = cursorKeys.shift.isDown;
-        var speed= 600;
+        var speed= 576/2;
+
         
 
         if(isUpDown) {
