@@ -53,6 +53,13 @@
         var housetop = map.createLayer('housetop', tileset, 0,0);
 
         scene.physics.add.existing(house)
+        house.setCollisionByProperty({collide:true}, true, true);
+        house.forEachTile(function(tile) {
+            if(tile.canCollide) {
+                collisionGroup.push(tile);
+                console.log(tile);
+            }
+        });
         scene.physics.add.existing(housetop)
     }
 
@@ -64,7 +71,7 @@
         ground = map.createLayer('ground', tileset, 0,0);
         addHouseLayer(this,map, tileset);
         
-        mario = this.physics.add.sprite(30, 30, 'mario').setBounce(1, 1).setCollideWorldBounds(true).setScale(2);
+        mario = this.physics.add.sprite(300, 300, 'mario').setBounce(1, 1).setCollideWorldBounds(true).setScale(2);
         layer1 = map.createLayer('layerblock', tileset, 0,0);
         layer1.setCollisionByProperty({collide:true}, true, true);
 
@@ -112,7 +119,10 @@
     {
         var scene = this;
         var collision = this.physics.collideTiles(mario, collisionGroup, function(colObj1, colObj2){
-            console.log(colObj2.index)
+            console.log(colObj2)
+            if(colObj2.properties.door) {
+                console.log('door')
+            }
             if(240 == colObj2.index || 239 == colObj2.index) {
                 displayText(scene, 'Schwarzes Brett');
                 
