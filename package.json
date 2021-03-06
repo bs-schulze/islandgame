@@ -1,0 +1,29 @@
+{
+  "name": "islandgame",
+  "version": "0.0.1",
+  "description": "A new Island Game",
+  "main": "game.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bs-schulze/islandgame.git"
+  },
+  "dependencies": {
+    "copy-webpack-plugin": "^8.0.0",
+    "phaser": "3.52.0",
+    "ts-loader": "^8.0.17",
+    "typescript": "^4.2.3",
+    "webpack": "^5.24.3",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "author": "Hannes Schulze",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bs-schulze/islandgame/issues"
+  },
+  "homepage": "https://github.com/bs-schulze/islandgame#readme"
+}
